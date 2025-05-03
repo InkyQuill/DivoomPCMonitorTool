@@ -146,12 +146,40 @@ class DivoomDeviceManager:
             logger.error(f"Unexpected error while sending system info: {e}")
 
     def get_cpu_temperature(self) -> str:
+        # Method 1: Using psutil (primary method)
         try:
             temps = psutil.sensors_temperatures()
-            if 'coretemp' in temps:
-                return f"{temps['coretemp'][0].current:.0f}°C"
+            # Check various possible sensor names
+            for sensor_name in ['coretemp', 'k10temp', 'zenpower', 'acpitz']:
+                if sensor_name in temps:
+                    # Get maximum temperature from all cores
+                    max_temp = max(temp.current for temp in temps[sensor_name])
+                    return f"{max_temp:.0f}°C"
         except Exception as e:
-            logger.warning(f"Error getting CPU temperature: {e}")
+            logger.debug(f"Error getting temperature via psutil: {e}")
+
+        # Method 2: Using sysfs (for Linux)
+        try:
+            with open('/sys/class/thermal/thermal_zone0/temp', 'r') as f:
+                temp = float(f.read().strip()) / 1000.0
+                return f"{temp:.0f}°C"
+        except Exception as e:
+            logger.debug(f"Error getting temperature via sysfs: {e}")
+
+        # Method 3: Using lm-sensors
+        try:
+            result = subprocess.run(['sensors', '-j'], capture_output=True, text=True)
+            if result.returncode == 0:
+                data = json.loads(result.stdout)
+                # Check various possible sensor names
+                for chip in data.values():
+                    for key, value in chip.items():
+                        if 'temp' in key.lower() and 'input' in key:
+                            temp = float(value)
+                            return f"{temp:.0f}°C"
+        except Exception as e:
+            logger.debug(f"Error getting temperature via lm-sensors: {e}")
+
         return "--"
 
     def get_cpu_usage(self) -> str:

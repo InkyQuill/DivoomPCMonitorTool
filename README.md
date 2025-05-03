@@ -31,18 +31,35 @@ The Linux version is a Python script that provides similar functionality through
 ### Requirements
 - Python 3.6 or higher
 - Divoom device (Pixoo64 or TimeGate) connected to the same network
-- Optional GPU monitoring tools:
-  - NVIDIA: `nvidia-smi` (installed with NVIDIA drivers)
-  - AMD: `rocm-smi` (part of ROCm)
-  - Intel: `intel-gpu-top` (part of intel-gpu-tools)
+- Required system packages:
+  - `lm-sensors` - for CPU temperature monitoring
+  - `psutil` - for system monitoring
+  - Optional GPU monitoring tools:
+    - NVIDIA: `nvidia-smi` (installed with NVIDIA drivers)
+    - AMD: `rocm-smi` (part of ROCm)
+    - Intel: `intel-gpu-top` (part of intel-gpu-tools)
 
 ### Installation
 1. Install Python 3.6 or higher
-2. Install dependencies:
+2. Install system packages:
+```bash
+# For Debian/Ubuntu:
+sudo apt-get install lm-sensors
+sudo sensors-detect  # Configure sensors
+
+# For Fedora:
+sudo dnf install lm_sensors
+sudo sensors-detect  # Configure sensors
+
+# For Arch Linux:
+sudo pacman -S lm-sensors
+sudo sensors-detect  # Configure sensors
+```
+3. Install Python dependencies:
 ```bash
 pip install -r Linux/requirements.txt
 ```
-3. Make the script executable:
+4. Make the script executable:
 ```bash
 chmod +x Linux/divoom.py
 ```
