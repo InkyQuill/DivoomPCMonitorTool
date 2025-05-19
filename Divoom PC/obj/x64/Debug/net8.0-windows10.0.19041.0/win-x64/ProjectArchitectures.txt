@@ -1,1 +1,0 @@
-C:\dev\Divoom\Divoom PC\Divoom PC.csproj;x64
