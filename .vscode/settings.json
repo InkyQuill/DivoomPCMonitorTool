@@ -1,0 +1,6 @@
+{
+    "[markdown]": {
+        "editor.cursorSurroundingLines": 0
+    },
+    "dotnet.defaultSolution": "disable"
+}

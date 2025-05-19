@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Divoom PC (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Divoom PC (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

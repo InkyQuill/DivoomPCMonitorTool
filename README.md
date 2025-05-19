@@ -98,3 +98,12 @@ sudo systemctl start divoom
 - Configuration is saved in `~/.divoom_config.json` on Linux
 - GPU monitoring requires appropriate drivers and tools
 - The application must be on the same network as the Divoom device
+
+
+# License and Credits
+
+This project is distributed under the MIT license (see [LICENSE](./LICENSE)).
+
+Original proof-of-concept code was developed by [DivoomDevelop](https://github.com/DivoomDevelop), and heavily revised, extended, and modernized by InkyQuill in 2025.
+
+Branding and logos from Divoom are used strictly for UI consistency when interacting with Divoom devices. This is an unofficial, community-driven project and is not affiliated with or endorsed by Divoom.
