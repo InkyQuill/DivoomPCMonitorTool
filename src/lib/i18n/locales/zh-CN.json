@@ -1,0 +1,35 @@
+{
+  "app": {
+    "name": "Divoom PC 伴侣"
+  },
+  "metrics": {
+    "cpu": "CPU",
+    "gpu": "GPU",
+    "memory": "内存",
+    "storage": "存储",
+    "temperature": "温度",
+    "usage": "使用率"
+  },
+  "device": {
+    "discover": "发现设备",
+    "connect": "连接",
+    "disconnect": "断开",
+    "not_found": "未找到设备",
+    "connected": "已连接",
+    "disconnected": "已断开"
+  },
+  "settings": {
+    "title": "设置",
+    "general": "通用",
+    "metrics": "指标",
+    "display": "显示",
+    "device": "设备",
+    "advanced": "高级",
+    "language": "语言",
+    "start_minimized": "最小化启动",
+    "autostart": "自动启动",
+    "update_interval": "更新间隔",
+    "save": "保存",
+    "cancel": "取消"
+  }
+}

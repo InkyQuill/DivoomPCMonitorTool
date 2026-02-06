@@ -1,0 +1,237 @@
+name: Test All Platforms
+
+on:
+  push:
+    branches: [main, rewrite, feature/tdd-implementation]
+  pull_request:
+    branches: [main, rewrite, feature/tdd-implementation]
+
+jobs:
+  # Backend Tests (Rust)
+  test-backend-linux:
+    name: Backend Tests (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            src-tauri/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run Rust tests
+        working-directory: src-tauri
+        run: cargo test --lib -- --test-threads=1
+
+      - name: Show test summary
+        if: always()
+        run: |
+          echo "✅ Backend tests on Linux completed"
+
+  test-backend-windows:
+    name: Backend Tests (Windows)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            src-tauri/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run Rust tests
+        working-directory: src-tauri
+        run: cargo test --lib -- --test-threads=1
+
+      - name: Show test summary
+        if: always()
+        run: |
+          echo "✅ Backend tests on Windows completed"
+
+  test-backend-macos:
+    name: Backend Tests (macOS)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            src-tauri/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run Rust tests
+        working-directory: src-tauri
+        run: cargo test --lib -- --test-threads=1
+
+      - name: Show test summary
+        if: always()
+        run: |
+          echo "✅ Backend tests on macOS completed"
+
+  # Frontend Tests (Node.js)
+  test-frontend:
+    name: Frontend Tests (All Platforms)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run frontend tests
+        run: npm run test:run
+
+      - name: Show test summary
+        if: always()
+        run: |
+          echo "✅ Frontend tests completed"
+
+  # Build check (ensure app compiles on all platforms)
+  build-check-linux:
+    name: Build Check (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            src-tauri/target
+          key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-build-
+
+      - name: Build application
+        working-directory: src-tauri
+        run: cargo build
+
+      - name: Show build summary
+        if: always()
+        run: |
+          echo "✅ Build check on Linux completed"
+
+  build-check-windows:
+    name: Build Check (Windows)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            src-tauri/target
+          key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-build-
+
+      - name: Build application
+        working-directory: src-tauri
+        run: cargo build
+
+      - name: Show build summary
+        if: always()
+        run: |
+          echo "✅ Build check on Windows completed"
+
+  build-check-macos:
+    name: Build Check (macOS)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            src-tauri/target
+          key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-build-
+
+      - name: Build application
+        working-directory: src-tauri
+        run: cargo build
+
+      - name: Show build summary
+        if: always()
+        run: |
+          echo "✅ Build check on macOS completed"
+
+  # Test summary
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [test-backend-linux, test-backend-windows, test-backend-macos, test-frontend]
+    if: always()
+    steps:
+      - name: Check test results
+        run: |
+          echo "# 📊 Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Backend Tests" >> $GITHUB_STEP_SUMMARY
+          echo "- Linux: ${{ needs.test-backend-linux.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Windows: ${{ needs.test-backend-windows.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- macOS: ${{ needs.test-backend-macos.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Frontend Tests" >> $GITHUB_STEP_SUMMARY
+          echo "- All Platforms: ${{ needs.test-frontend.result }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload results
+        if: always()
+        run: |
+          if [ "${{ needs.test-backend-linux.result }}" != "success" ] || \
+             [ "${{ needs.test-backend-windows.result }}" != "success" ] || \
+             [ "${{ needs.test-backend-macos.result }}" != "success" ]; then
+            echo "❌ Some backend tests failed"
+            exit 1
+          fi
