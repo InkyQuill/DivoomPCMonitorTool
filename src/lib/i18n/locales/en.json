@@ -1,0 +1,35 @@
+{
+  "app": {
+    "name": "Divoom PC Companion"
+  },
+  "metrics": {
+    "cpu": "CPU",
+    "gpu": "GPU",
+    "memory": "Memory",
+    "storage": "Storage",
+    "temperature": "Temperature",
+    "usage": "Usage"
+  },
+  "device": {
+    "discover": "Discover Devices",
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "not_found": "No devices found",
+    "connected": "Connected",
+    "disconnected": "Disconnected"
+  },
+  "settings": {
+    "title": "Settings",
+    "general": "General",
+    "metrics": "Metrics",
+    "display": "Display",
+    "device": "Device",
+    "advanced": "Advanced",
+    "language": "Language",
+    "start_minimized": "Start minimized",
+    "autostart": "Autostart",
+    "update_interval": "Update interval",
+    "save": "Save",
+    "cancel": "Cancel"
+  }
+}

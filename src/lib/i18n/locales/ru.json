@@ -1,0 +1,35 @@
+{
+  "app": {
+    "name": "Divoom PC Компаньон"
+  },
+  "metrics": {
+    "cpu": "ЦП",
+    "gpu": "ГП",
+    "memory": "Память",
+    "storage": "Диск",
+    "temperature": "Температура",
+    "usage": "Использование"
+  },
+  "device": {
+    "discover": "Найти устройства",
+    "connect": "Подключить",
+    "disconnect": "Отключить",
+    "not_found": "Устройства не найдены",
+    "connected": "Подключено",
+    "disconnected": "Отключено"
+  },
+  "settings": {
+    "title": "Настройки",
+    "general": "Общее",
+    "metrics": "Метрики",
+    "display": "Дисплей",
+    "device": "Устройство",
+    "advanced": "Расширенные",
+    "language": "Язык",
+    "start_minimized": "Запуск свернутым",
+    "autostart": "Автозапуск",
+    "update_interval": "Интервал обновления",
+    "save": "Сохранить",
+    "cancel": "Отмена"
+  }
+}
