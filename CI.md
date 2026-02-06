@@ -1,6 +1,6 @@
 # CI Status
 
-[![CI](https://github.com/YOUR_USERNAME/YOUR_REPO/workflows/CI/badge.svg)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/ci.yml)
+[![CI](https://github.com/InkyQuill/DivoomPCMonitorTool/workflows/CI/badge.svg)](https://github.com/InkyQuill/DivoomPCMonitorTool/actions/workflows/ci.yml)
 
 ---
 
@@ -8,9 +8,9 @@
 
 | Platform | Status | Details |
 |----------|--------|---------|
-| **Linux** | [![CI](https://img.shields.io/github/actions-workflow/status/YOUR_USERNAME/YOUR_REPO/CI.yml?label=Linux)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/ci.yml) | Backend + Frontend |
-| **Windows** | [![CI](https://img.shields.io/github/actions-workflow/status/YOUR_USERNAME/YOUR_REPO/CI.yml?label=Windows)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/ci.yml) | Backend |
-| **macOS** | [![CI](https://img.shields.io/github/actions-workflow/status/YOUR_USERNAME/YOUR_REPO/CI.yml?label=macOS)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/ci.yml) | Backend |
+| **Linux** | [![CI](https://img.shields.io/github/actions-workflow/status/InkyQuill/DivoomPCMonitorTool/CI.yml?label=Linux)](https://github.com/InkyQuill/DivoomPCMonitorTool/actions/workflows/ci.yml) | Backend + Frontend |
+| **Windows** | [![CI](https://img.shields.io/github/actions-workflow/status/InkyQuill/DivoomPCMonitorTool/CI.yml?label=Windows)](https://github.com/InkyQuill/DivoomPCMonitorTool/actions/workflows/ci.yml) | Backend |
+| **macOS** | [![CI](https://img.shields.io/github/actions-workflow/status/InkyQuill/DivoomPCMonitorTool/CI.yml?label=macOS)](https://github.com/InkyQuill/DivoomPCMonitorTool/actions/workflows/ci.yml) | Backend |
 
 ---
 

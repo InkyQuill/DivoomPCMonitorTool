@@ -19,10 +19,10 @@
 // - Windows: ⏳ TODO (uses Registry Run key)
 // - macOS: ⏳ TODO (uses launchd/LaunchAgents)
 
-use std::path::{Path, PathBuf};
-use std::fs;
-use std::env;
 use crate::core::Result;
+use std::env;
+use std::fs;
+use std::path::{Path, PathBuf};
 
 /// Autostart manager for controlling application autostart behavior
 ///
@@ -240,10 +240,7 @@ mod tests {
         {
             let path = manager.get_autostart_file_path();
             // After enable(), the file should exist
-            assert!(
-                path.exists(),
-                "Autostart file should exist after enable()"
-            );
+            assert!(path.exists(), "Autostart file should exist after enable()");
         }
 
         // Clean up
@@ -277,7 +274,10 @@ mod tests {
         let _ = manager.disable();
 
         // Initially should be false
-        assert!(!manager.is_enabled(), "Autostart should be disabled initially");
+        assert!(
+            !manager.is_enabled(),
+            "Autostart should be disabled initially"
+        );
 
         // After enable, should be true
         let _ = manager.enable();
@@ -328,8 +328,14 @@ mod tests {
             if path.exists() {
                 let content = fs::read_to_string(&path).unwrap();
                 // Should contain basic .desktop file entries
-                assert!(content.contains("[Desktop Entry]"), "Should have [Desktop Entry]");
-                assert!(content.contains("Type=Application"), "Should have Type=Application");
+                assert!(
+                    content.contains("[Desktop Entry]"),
+                    "Should have [Desktop Entry]"
+                );
+                assert!(
+                    content.contains("Type=Application"),
+                    "Should have Type=Application"
+                );
             }
         }
 

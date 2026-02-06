@@ -1,10 +1,10 @@
-use crate::core::{SystemMetrics, CpuMetrics, MemoryMetrics, StorageMetrics, GpuMetrics};
+use crate::core::Result;
+use crate::core::{CpuMetrics, GpuMetrics, MemoryMetrics, StorageMetrics, SystemMetrics};
 use crate::system::cpu::get_cpu_metrics;
+use crate::system::gpu::get_gpu_metrics;
 use crate::system::memory::get_memory_metrics;
 use crate::system::storage::get_storage_metrics;
-use crate::system::gpu::get_gpu_metrics;
 use sysinfo::System;
-use crate::core::Result;
 
 pub struct MetricsCollector {
     system: System,

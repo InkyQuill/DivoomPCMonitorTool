@@ -18,16 +18,16 @@ function createDevicesStore() {
   return {
     subscribe,
     discover: async () => {
-      update(state => ({ ...state, loading: true, error: null }));
+      update((state) => ({ ...state, loading: true, error: null }));
 
       try {
         const devices = await invoke<DivoomDevice[]>('discover_devices_command');
-        update(state => ({ ...state, devices, loading: false }));
+        update((state) => ({ ...state, devices, loading: false }));
       } catch (error) {
-        update(state => ({
+        update((state) => ({
           ...state,
           loading: false,
-          error: error instanceof Error ? error.message : 'Failed to discover devices'
+          error: error instanceof Error ? error.message : 'Failed to discover devices',
         }));
       }
     },

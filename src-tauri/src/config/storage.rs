@@ -1,4 +1,4 @@
-use super::{schema::AppConfig, defaults::default_config};
+use super::{defaults::default_config, schema::AppConfig};
 use crate::core::{AppError, Result};
 use std::fs;
 use std::path::PathBuf;

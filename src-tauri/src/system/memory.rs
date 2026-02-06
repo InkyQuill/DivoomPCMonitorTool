@@ -56,7 +56,12 @@ mod tests {
         let diff = (metrics.total_gb - sum).abs();
 
         // Allow small rounding difference
-        assert!(diff < 0.1, "Total GB ({}) should equal used + available ({})", metrics.total_gb, sum);
+        assert!(
+            diff < 0.1,
+            "Total GB ({}) should equal used + available ({})",
+            metrics.total_gb,
+            sum
+        );
     }
 
     #[test]
@@ -70,7 +75,12 @@ mod tests {
         let expected_percent = (metrics.used_gb / metrics.total_gb) * 100.0;
         let diff = (metrics.usage_percent as f64 - expected_percent).abs();
 
-        assert!(diff < 0.5, "Usage percent ({}) should match ratio ({})", metrics.usage_percent, expected_percent);
+        assert!(
+            diff < 0.5,
+            "Usage percent ({}) should match ratio ({})",
+            metrics.usage_percent,
+            expected_percent
+        );
     }
 
     #[test]

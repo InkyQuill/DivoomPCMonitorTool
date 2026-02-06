@@ -1,8 +1,8 @@
 // Linux-specific CPU temperature detection
 // NOTE: Tests written FIRST (TDD RED phase)
 
-use std::path::Path;
 use std::fs;
+use std::path::Path;
 
 /// Get CPU temperature from Linux hwmon/thermal zones
 /// Returns temperature in Celsius, or None if unavailable
@@ -48,16 +48,14 @@ fn get_temperature_from_hwmon() -> Option<f32> {
                 || name_lower.contains("cpu")      // Generic CPU
                 || name_lower.contains("via")      // VIA
                 || name_lower.contains("acpitz")   // ACPI thermal zone
-                || name_lower.contains("x86_pkg_temp");  // Intel PCH
+                || name_lower.contains("x86_pkg_temp"); // Intel PCH
 
             if is_cpu_sensor {
                 // Look for temp*_input files (usually temp1_input, temp2_input, etc.)
                 if let Ok(entries) = fs::read_dir(&device_path) {
                     for file in entries.flatten() {
                         let file_path = file.path();
-                        let file_name = file_path.file_name()
-                            .unwrap_or_default()
-                            .to_string_lossy();
+                        let file_name = file_path.file_name().unwrap_or_default().to_string_lossy();
 
                         if file_name.starts_with("temp") && file_name.ends_with("_input") {
                             if let Ok(temp_str) = fs::read_to_string(&file_path) {
@@ -100,7 +98,8 @@ fn get_temperature_from_thermal() -> Option<f32> {
             let type_path = zone_path.join("type");
             if let Ok(type_content) = fs::read_to_string(&type_path) {
                 let type_str = type_content.to_lowercase();
-                if type_str.contains("cpu") || type_str.contains("x86") || type_str.contains("acpi") {
+                if type_str.contains("cpu") || type_str.contains("x86") || type_str.contains("acpi")
+                {
                     // This is likely a CPU thermal zone, read temperature
                     let temp_path = zone_path.join("temp");
                     if let Ok(temp_str) = fs::read_to_string(&temp_path) {
@@ -132,7 +131,7 @@ mod tests {
         // Function should return Option (Some or None)
         match temp {
             Some(t) => assert!(t >= 0.0 && t <= 150.0), // Reasonable CPU temp range
-            None => {} // Also acceptable if no thermal sensor
+            None => {}                                  // Also acceptable if no thermal sensor
         }
     }
 
@@ -146,7 +145,11 @@ mod tests {
             assert!(t <= 150.0, "Temperature should be <= 150°C, got {}", t);
 
             // Most systems should report between 20-100°C
-            assert!(t >= 20.0 || t <= 110.0, "Temperature seems unrealistic: {}°C", t);
+            assert!(
+                t >= 20.0 || t <= 110.0,
+                "Temperature seems unrealistic: {}°C",
+                t
+            );
         }
     }
 
@@ -185,7 +188,12 @@ mod tests {
                 // Temperatures should be similar (within 5°C)
                 // CPU temp doesn't change THAT fast between calls
                 let diff = (t1 - t2).abs();
-                assert!(diff <= 5.0, "Temperatures changed too rapidly: {} vs {}", t1, t2);
+                assert!(
+                    diff <= 5.0,
+                    "Temperatures changed too rapidly: {} vs {}",
+                    t1,
+                    t2
+                );
             }
             (None, None) => {} // Both unavailable - OK
             _ => {
@@ -215,14 +223,12 @@ mod tests {
         let has_thermal_zones = thermal_path.exists()
             && fs::read_dir(thermal_path)
                 .map(|entries| {
-                    entries
-                        .flatten()
-                        .any(|entry| {
-                            entry
-                                .file_name()
-                                .to_string_lossy()
-                                .starts_with("thermal_zone")
-                        })
+                    entries.flatten().any(|entry| {
+                        entry
+                            .file_name()
+                            .to_string_lossy()
+                            .starts_with("thermal_zone")
+                    })
                 })
                 .unwrap_or(false);
 
@@ -259,21 +265,19 @@ mod tests {
         // Check if any hwmon device with CPU name exists
         let has_cpu_hwmon = fs::read_dir(hwmon_path)
             .map(|entries| {
-                entries
-                    .flatten()
-                    .any(|entry| {
-                        let name_path = entry.path().join("name");
-                        if let Ok(name) = fs::read_to_string(&name_path) {
-                            let name_lower = name.to_lowercase();
-                            name_lower.contains("k10temp")  // AMD
+                entries.flatten().any(|entry| {
+                    let name_path = entry.path().join("name");
+                    if let Ok(name) = fs::read_to_string(&name_path) {
+                        let name_lower = name.to_lowercase();
+                        name_lower.contains("k10temp")  // AMD
                                 || name_lower.contains("coretemp")  // Intel
                                 || name_lower.contains("cpu")
                                 || name_lower.contains("k8temp")
                                 || name_lower.contains("via")
-                        } else {
-                            false
-                        }
-                    })
+                    } else {
+                        false
+                    }
+                })
             })
             .unwrap_or(false);
 
@@ -317,15 +321,10 @@ mod tests {
                         // This is a CPU device, check for temp*_input
                         let has_temp = fs::read_dir(&device_path)
                             .map(|e| {
-                                e.flatten()
-                                    .any(|f| {
-                                        f.file_name()
-                                            .to_string_lossy()
-                                            .starts_with("temp")
-                                            && f.file_name()
-                                                .to_string_lossy()
-                                            .ends_with("_input")
-                                    })
+                                e.flatten().any(|f| {
+                                    f.file_name().to_string_lossy().starts_with("temp")
+                                        && f.file_name().to_string_lossy().ends_with("_input")
+                                })
                             })
                             .unwrap_or(false);
 
@@ -354,4 +353,3 @@ mod tests {
         }
     }
 }
-

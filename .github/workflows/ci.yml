@@ -2,14 +2,45 @@ name: CI
 
 on:
   push:
-    branches: [main, rewrite]
+    branches: [main, rewrite, feature/tdd-implementation]
   pull_request:
-    branches: [main, rewrite]
+    branches: [main, rewrite, feature/tdd-implementation]
 
 jobs:
+  # Quality checks first (fast feedback)
+  formatting:
+    name: Check Formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check Rust formatting
+        working-directory: src-tauri
+        run: cargo fmt -- --check
+
+      - name: Check frontend formatting
+        run: npm run format:check || echo "⚠️  Frontend format check not configured"
+
+  linting:
+    name: Run Linters
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Clippy
+        working-directory: src-tauri
+        run: cargo clippy -- -D warnings
+
+      - name: Run frontend linter
+        run: npm run lint || echo "⚠️  Frontend lint not configured"
+
+  # Then run tests
   test:
     name: Test (Rust)
     runs-on: ${{ matrix.os }}
+    needs: [formatting, linting]
     strategy:
       fail-fast: false
       matrix:

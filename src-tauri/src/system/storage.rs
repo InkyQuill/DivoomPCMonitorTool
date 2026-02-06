@@ -1,4 +1,4 @@
-use crate::core::{StorageMetrics, Result};
+use crate::core::{Result, StorageMetrics};
 use sysinfo::System;
 
 pub fn get_storage_metrics(system: &System) -> Result<StorageMetrics> {
@@ -34,7 +34,7 @@ fn get_storage_metrics_linux() -> Option<StorageMetrics> {
 
     // Simple approach: read from df command output or /proc/mounts
     if let Ok(output) = std::process::Command::new("df")
-        .arg("-B1")  // 1-byte blocks
+        .arg("-B1") // 1-byte blocks
         .arg("/")
         .output()
     {
@@ -100,7 +100,11 @@ mod tests {
         assert!(storage.free_gb >= 0.0, "Free space should be >= 0");
 
         // Sanity checks
-        assert!(storage.total_gb < 10000.0, "Total disk > 10TB seems unrealistic: {}", storage.total_gb);
+        assert!(
+            storage.total_gb < 10000.0,
+            "Total disk > 10TB seems unrealistic: {}",
+            storage.total_gb
+        );
         assert!(storage.usage_percent >= 0.0 && storage.usage_percent <= 100.0);
 
         // Consistency check

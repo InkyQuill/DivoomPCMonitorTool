@@ -9,10 +9,10 @@
 
 use crate::core::{GpuMetrics, Result};
 
-mod nvidia;
 mod amd;
-mod intel;
 mod generic;
+mod intel;
+mod nvidia;
 
 /// Get GPU metrics with vendor detection and real usage/temperature data.
 ///
@@ -46,11 +46,12 @@ pub fn get_gpu_metrics() -> Result<GpuMetrics> {
 /// 3. /sys/class/hwmon (generic hardware monitoring)
 #[cfg(target_os = "linux")]
 fn get_gpu_metrics_linux() -> Option<GpuMetrics> {
-    use std::path::Path;
     use std::fs;
+    use std::path::Path;
 
     // Try NVIDIA first (nvidia-smi)
-    if Path::new("/usr/bin/nvidia-smi").exists() || Path::new("/usr/local/bin/nvidia-smi").exists() {
+    if Path::new("/usr/bin/nvidia-smi").exists() || Path::new("/usr/local/bin/nvidia-smi").exists()
+    {
         if let Ok(output) = std::process::Command::new("nvidia-smi")
             .arg("--query-gpu=utilization.gpu,temperature.gpu")
             .arg("--format=csv,noheader,nounits")
@@ -121,9 +122,12 @@ fn get_gpu_metrics_linux() -> Option<GpuMetrics> {
                 let uevent_path = device_path.join("uevent");
                 let vendor = if uevent_path.exists() {
                     if let Ok(uevent_content) = fs::read_to_string(&uevent_path) {
-                        if uevent_content.contains("PCI_ID=1002") || uevent_content.contains("AMD") {
+                        if uevent_content.contains("PCI_ID=1002") || uevent_content.contains("AMD")
+                        {
                             "AMD".to_string()
-                        } else if uevent_content.contains("PCI_ID=8086") || uevent_content.contains("Intel") {
+                        } else if uevent_content.contains("PCI_ID=8086")
+                            || uevent_content.contains("Intel")
+                        {
                             "Intel".to_string()
                         } else {
                             "Generic".to_string()
@@ -273,7 +277,11 @@ mod tests {
         {
             if metrics.temperature.is_some() {
                 let temp = metrics.temperature.unwrap();
-                assert!(temp >= 30.0 && temp <= 120.0, "GPU temp {}°C out of range", temp);
+                assert!(
+                    temp >= 30.0 && temp <= 120.0,
+                    "GPU temp {}°C out of range",
+                    temp
+                );
             }
             // If None, that's also OK - not all GPUs report temperature
         }
@@ -332,6 +340,11 @@ mod tests {
 
         // Usage may vary slightly between calls, but should be similar
         let diff = (metrics1.usage_percent - metrics2.usage_percent).abs();
-        assert!(diff <= 100.0, "Usage changed too much: {:.1} vs {:.1}", metrics1.usage_percent, metrics2.usage_percent);
+        assert!(
+            diff <= 100.0,
+            "Usage changed too much: {:.1} vs {:.1}",
+            metrics1.usage_percent,
+            metrics2.usage_percent
+        );
     }
 }

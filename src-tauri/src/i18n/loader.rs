@@ -12,8 +12,8 @@
 // }
 
 use std::collections::HashMap;
-use std::path::Path;
 use std::fs;
+use std::path::Path;
 
 /// Load translations for a specific language from JSON file
 ///
@@ -44,7 +44,8 @@ pub fn load_translations(language: &str) -> HashMap<String, String> {
             // Read file content
             if let Ok(content) = fs::read_to_string(&file_path) {
                 // Parse JSON
-                if let Ok(translations) = serde_json::from_str::<HashMap<String, String>>(&content) {
+                if let Ok(translations) = serde_json::from_str::<HashMap<String, String>>(&content)
+                {
                     return translations;
                 }
             }
@@ -120,8 +121,7 @@ pub fn get_translation_with_fallback(key: &str, language: &str) -> Option<String
 /// let title = get_translation_or_default("app.name", "en", "My App");
 /// ```
 pub fn get_translation_or_default(key: &str, language: &str, default: &str) -> String {
-    get_translation_with_fallback(key, language)
-        .unwrap_or_else(|| default.to_string())
+    get_translation_with_fallback(key, language).unwrap_or_else(|| default.to_string())
 }
 
 #[cfg(test)]
@@ -134,7 +134,10 @@ mod tests {
         let translations = load_translations("en");
 
         // Should have loaded translations from JSON file
-        assert!(!translations.is_empty(), "English translations should be loaded from JSON file");
+        assert!(
+            !translations.is_empty(),
+            "English translations should be loaded from JSON file"
+        );
     }
 
     #[test]
@@ -143,9 +146,9 @@ mod tests {
 
         // Should have common translation keys
         assert!(
-            translations.contains_key("app.name") ||
-            translations.contains_key("common.ok") ||
-            translations.contains_key("common.cancel"),
+            translations.contains_key("app.name")
+                || translations.contains_key("common.ok")
+                || translations.contains_key("common.cancel"),
             "Translations should contain common keys"
         );
     }

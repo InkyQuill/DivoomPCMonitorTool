@@ -18,16 +18,16 @@ function createMetricsStore() {
   return {
     subscribe,
     refresh: async () => {
-      update(state => ({ ...state, loading: true, error: null }));
+      update((state) => ({ ...state, loading: true, error: null }));
 
       try {
         const metrics = await invoke<SystemMetrics>('collect_metrics');
-        update(state => ({ ...state, metrics, loading: false }));
+        update((state) => ({ ...state, metrics, loading: false }));
       } catch (error) {
-        update(state => ({
+        update((state) => ({
           ...state,
           loading: false,
-          error: error instanceof Error ? error.message : 'Failed to collect metrics'
+          error: error instanceof Error ? error.message : 'Failed to collect metrics',
         }));
       }
     },

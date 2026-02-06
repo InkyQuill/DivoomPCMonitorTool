@@ -1,4 +1,4 @@
-use super::models::{DivoomDevice, DeviceListResponse};
+use super::models::{DeviceListResponse, DivoomDevice};
 use crate::core::{AppError, Result};
 use reqwest::Client;
 use serde_json::Value;

@@ -26,7 +26,7 @@
 <div class="main-window p-4 bg-gray-100 dark:bg-gray-900 min-h-screen">
   <header class="flex justify-between items-center mb-4">
     <h1 class="text-xl font-bold">Divoom PC Companion</h1>
-    <StatusIndicator connected={connected} />
+    <StatusIndicator {connected} />
   </header>
 
   {#if $metrics.loading}
@@ -40,8 +40,7 @@
         value={formatPercent($metrics.metrics.cpu.usage_percent)}
         subtitle={$metrics.metrics.cpu.temperature
           ? `Temp: ${$metrics.metrics.cpu.temperature.toFixed(1)}°C`
-          : ''
-        }
+          : ''}
         color="text-blue-500"
       />
       <MetricCard
@@ -49,24 +48,23 @@
         value={formatPercent($metrics.metrics.gpu.usage_percent)}
         subtitle={$metrics.metrics.gpu.temperature
           ? `Temp: ${$metrics.metrics.gpu.temperature.toFixed(1)}°C`
-          : ''
-        }
+          : ''}
         color="text-green-500"
       />
       <MetricCard
         title="Memory"
         value={formatPercent($metrics.metrics.memory.usage_percent)}
         subtitle={`${formatBytes($metrics.metrics.memory.used_gb)} / ${formatBytes(
-            $metrics.metrics.memory.total_gb
-          )}`}
+          $metrics.metrics.memory.total_gb
+        )}`}
         color="text-purple-500"
       />
       <MetricCard
         title="Storage"
         value={formatPercent($metrics.metrics.storage.usage_percent)}
         subtitle={`${formatBytes($metrics.metrics.storage.used_gb)} / ${formatBytes(
-            $metrics.metrics.storage.total_gb
-          )}`}
+          $metrics.metrics.storage.total_gb
+        )}`}
         color="text-orange-500"
       />
     </div>

@@ -18,30 +18,30 @@ function createConfigStore() {
   return {
     subscribe,
     load: async () => {
-      update(state => ({ ...state, loading: true, error: null }));
+      update((state) => ({ ...state, loading: true, error: null }));
 
       try {
         const config = await invoke<AppConfig>('get_config');
-        update(state => ({ ...state, config, loading: false }));
+        update((state) => ({ ...state, config, loading: false }));
       } catch (error) {
-        update(state => ({
+        update((state) => ({
           ...state,
           loading: false,
-          error: error instanceof Error ? error.message : 'Failed to load config'
+          error: error instanceof Error ? error.message : 'Failed to load config',
         }));
       }
     },
     save: async (config: AppConfig) => {
-      update(state => ({ ...state, loading: true, error: null }));
+      update((state) => ({ ...state, loading: true, error: null }));
 
       try {
         await invoke('save_config_command', { config });
-        update(state => ({ ...state, config, loading: false }));
+        update((state) => ({ ...state, config, loading: false }));
       } catch (error) {
-        update(state => ({
+        update((state) => ({
           ...state,
           loading: false,
-          error: error instanceof Error ? error.message : 'Failed to save config'
+          error: error instanceof Error ? error.message : 'Failed to save config',
         }));
       }
     },

@@ -26,9 +26,5 @@
     </button>
   </div>
 
-  <DeviceList
-    devices={$devices.devices}
-    loading={$devices.loading}
-    onSelect={handleSelect}
-  />
+  <DeviceList devices={$devices.devices} loading={$devices.loading} onSelect={handleSelect} />
 </div>

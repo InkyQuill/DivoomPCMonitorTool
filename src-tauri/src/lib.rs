@@ -1,15 +1,15 @@
-mod core;
 mod config;
+mod core;
 mod devices;
+mod i18n;
 mod system;
 mod ui;
-mod i18n;
 
 use config::{load_config, save_config as save_config_to_file, AppConfig};
 use core::SystemMetrics;
 use devices::{discover_devices, send_metrics, DivoomDevice};
-use system::MetricsCollector;
 use std::sync::Mutex;
+use system::MetricsCollector;
 use tauri::{Manager, State};
 use ui::tray::{handle_tray_event, TrayIcon};
 
@@ -21,17 +21,11 @@ pub struct AppState {
 
 #[tauri::command]
 async fn discover_devices_command() -> Result<Vec<DivoomDevice>, String> {
-    discover_devices()
-        .await
-        .map_err(|e| e.to_string())
+    discover_devices().await.map_err(|e| e.to_string())
 }
 
 #[tauri::command]
-async fn send_metrics_command(
-    ip: String,
-    lcd_id: i32,
-    metrics: Vec<String>,
-) -> Result<(), String> {
+async fn send_metrics_command(ip: String, lcd_id: i32, metrics: Vec<String>) -> Result<(), String> {
     send_metrics(&ip, lcd_id, metrics)
         .await
         .map_err(|e| e.to_string())
@@ -44,10 +38,7 @@ fn get_config(state: State<'_, AppState>) -> Result<AppConfig, String> {
 }
 
 #[tauri::command]
-fn save_config_command(
-    config: AppConfig,
-    state: State<'_, AppState>,
-) -> Result<(), String> {
+fn save_config_command(config: AppConfig, state: State<'_, AppState>) -> Result<(), String> {
     save_config_to_file(&config).map_err(|e| e.to_string())?;
 
     let mut state_config = state.config.lock().unwrap();
@@ -64,9 +55,7 @@ fn collect_metrics(state: State<'_, AppState>) -> Result<SystemMetrics, String> 
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let config = load_config().unwrap_or_else(|_| {
-        crate::config::default_config()
-    });
+    let config = load_config().unwrap_or_else(|_| crate::config::default_config());
 
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
@@ -83,11 +72,13 @@ pub fn run() {
                 // Create menu items
                 let show_item = MenuItem::with_id(app, "show", "Show", true, None::<String>)?;
                 let hide_item = MenuItem::with_id(app, "hide", "Hide", true, None::<String>)?;
-                let settings_item = MenuItem::with_id(app, "settings", "Settings", true, None::<String>)?;
+                let settings_item =
+                    MenuItem::with_id(app, "settings", "Settings", true, None::<String>)?;
                 let quit_item = MenuItem::with_id(app, "quit", "Quit", true, None::<String>)?;
 
                 // Build menu
-                let menu = Menu::with_items(app, &[&show_item, &hide_item, &settings_item, &quit_item])?;
+                let menu =
+                    Menu::with_items(app, &[&show_item, &hide_item, &settings_item, &quit_item])?;
 
                 // Build tray icon with menu
                 let _tray = TrayIconBuilder::with_id(tray_id)

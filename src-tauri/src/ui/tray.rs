@@ -4,7 +4,7 @@
 // Implementation uses Tauri 2 tray-icon feature
 // Requires: icon file at src-tauri/icons/icon.png (32x32 PNG recommended)
 
-use tauri::{AppHandle, Manager, Emitter};
+use tauri::{AppHandle, Emitter, Manager};
 
 pub struct TrayIcon {
     app: AppHandle,
@@ -46,12 +46,7 @@ impl TrayIcon {
     /// Get menu item labels for testing
     #[cfg(test)]
     fn get_menu_items() -> Vec<&'static str> {
-        vec![
-            "Show",
-            "Hide",
-            "Settings",
-            "Quit"
-        ]
+        vec!["Show", "Hide", "Settings", "Quit"]
     }
 }
 
@@ -103,7 +98,10 @@ mod tests {
         // All required menu items must be present
         assert!(items.contains(&"Show"), "Menu must have 'Show' item");
         assert!(items.contains(&"Hide"), "Menu must have 'Hide' item");
-        assert!(items.contains(&"Settings"), "Menu must have 'Settings' item");
+        assert!(
+            items.contains(&"Settings"),
+            "Menu must have 'Settings' item"
+        );
         assert!(items.contains(&"Quit"), "Menu must have 'Quit' item");
     }
 
@@ -142,7 +140,10 @@ mod tests {
         // All menu item labels should be non-empty
         for item in items {
             assert!(!item.is_empty(), "Menu item labels should not be empty");
-            assert!(item.len() <= 20, "Menu item labels should be reasonably short");
+            assert!(
+                item.len() <= 20,
+                "Menu item labels should be reasonably short"
+            );
         }
     }
 
